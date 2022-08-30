@@ -1,12 +1,10 @@
-from math import sqrt
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import t
 
 datos = pd.read_table("radios.txt")
-
-info = datos['Datos'].values
+info = np.array(datos['Datos'].values)
 media = info.mean()
 
 # Importación del archivo
@@ -68,14 +66,38 @@ plt.close()
 # Error sistemático: Error ligado al equipo de medición
 # Error aleatorio: Ligados a un componente estadístico
 
+# er_lon=float(input('Ingrese el error en la longitud: '))
+# er_tiem = float(input('Ingrese el error en el tiempo: '))
+# er_grav = float(input('Ingrese el error en la gravedad: '))
+# er_rad = float(input('Ingrese el error en los radios: '))
+# --------------------------------------------------------
+#---------------Definición de variables---------------------
+# er_relat_lon = er_lon/np.min(longs)
+# er_relt_tem = er_tiem/np.min(temp_prom)
+# er_relat_grav = er_grav/9.78
+# er_relat_rad = er_rad/media
+tam_muest_rad = info.shape[0]
+# ------------------------------------------------------
 #------------------------Parámetro t-student--------------------------
-print(len(longs))
+
 t = t.interval(0.95, len(longs)-2)[1]
 t = np.round(t,3)
 print(t)
 
-y_ax = (longs-b-a*tiempos)**2
-free_deg =10
-sd = np.sqrt(np.sum(y_ax)/free_deg)
-sd = np.round(sd, 5)
-print(sd)
+stand_desv = np.sqrt((1/(tam_muest_rad-1))*((info-media)**2))[0]
+print(stand_desv)
+#print('La desviación estándar es',stand_desv)
+#free_deg =10
+#sd = np.sqrt(np.sum(y_ax)/free_deg)
+#sd = np.round(sd, 5)
+#print(sd)
+
+# -------------------Propagación de errores-----------------------------
+# print('\n+-----------------Errores relativos---------------------+')
+# print(f"El error relativo en la longitud es: {np.round(er_relat_lon,5)}")
+# print(f'El error relativo en el tiempo es: {np.round(er_relt_tem,5)}')
+# print(f'El error relativo en la gravedad es: {round(er_relat_grav,5)}')
+# print(f'El error relativo en el radio es: {round(er_relat_rad,5)}')
+
+
+
