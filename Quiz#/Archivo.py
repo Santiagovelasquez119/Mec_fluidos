@@ -36,7 +36,7 @@ plt.ylabel('Longitud(pie)')
 plt.grid(ls='--')
 plt.plot(tiempo, ecuacion, ls='--', color='r', label=etiqueta)
 plt.legend()
-plt.savefig('Datos experimentales Quiz#1', dpi=150)
+plt.savefig('Datos experimentales Quiz#1.pdf', dpi=150)
 #plt.show()
 plt.close()
 
@@ -53,18 +53,26 @@ stand_desv_vel = np.sqrt((np.sum((longitudes-b-a*tiempo)**2))/(5-2))
 sxx = np.sum((tiempo - np.mean(tiempo))**2)
 t_2 = round(t.interval(0.95, 5-2)[1], 3)
 er_aleat_vel = (1/a)*t_2*(stand_desv_vel/np.sqrt(sxx))
+er_tot_vel = np.sqrt(er_sist_vel**2+er_aleat_vel**2)
 
-print('El error sistemático en la longitud es:',round(er_sist_long,4))
-print('El error sistemático en el tiempo es: ', round(er_sis_time,4))
-print('El error sistemático en la gravedad es:', round(er_sist_grav,4))
-print('El error sistemático en la esfera es', round(er_sist_esf,4))
-print('El error en la diferencia de las densidades es: ', round(er_sist_difmean,4))
+visc = (2/9)*(dens_c-dens_f)*(grav)*(rad_esf**2)*(1/(a))
+er_visc= np.sqrt((er_sist_difmean)**2+(er_grav)**2+(2*(er_esf**2))+er_sist_vel**2)
+
+print('El error sistemático en la longitud es:',round(er_sist_long,4)*100)
+print('El error sistemático en el tiempo es: ', round(er_sis_time,4)*100)
+print('El error sistemático en la gravedad es:', round(er_sist_grav,4)*100)
+print('El error sistemático en la esfera es', round(er_sist_esf,4)*100)
+print('El error en la diferencia de las densidades es: ', round(er_sist_difmean,4)*100)
 print('La velocidad promedio es: ',a)
-print('El error sistemático en la velocidad límite es:',round(er_sist_vel,4))
-print('El error aleatorio en la velocidad límite es:',round(er_aleat_vel,4))
+print('El error sistemático en la velocidad límite es:',round(er_sist_vel,4)*100)
+print('El error aleatorio en la velocidad límite es:',round(er_aleat_vel,4)*100)
+print('El error total en la velocidad es:',er_tot_vel*100)
+print('La viscosidad es:', visc)
+print('El error en la viscosidad es:',er_visc*100)
 
 
 
+#0.00002391
 
 
 
