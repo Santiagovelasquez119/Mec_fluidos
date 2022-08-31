@@ -16,7 +16,7 @@ temp_prom = np.array(datos_2['Promedio'].values)
 # Se obtienen los datos de la columna longs y se convierte en array de python
 longs = np.array(datos_2['longs'].values)
 # Tomamos todos los tiempos reportados de todas las filas(:) y de la columna uno a la once(1:11)
-tiempos = np.array(datos_2)[:, 1:11]
+tiempos = np.array(datos_2)[:, 1:-2]
 # Hacemos la transpuesta de los tiempos para poder plotear la gráfica
 tiempos = np.transpose(tiempos)
 
