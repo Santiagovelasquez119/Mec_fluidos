@@ -61,47 +61,58 @@ plt.legend()
 plt.savefig('Ajuste experimento bolas.pdf', dpi=150)
 #plt.show()
 plt.close()
-# --------------------------------------------------------------#
 # ----------------------Propagación de errores------------------------
 # Error sistemático: Error ligado al equipo de medición
 # Error aleatorio: Ligados a un componente estadístico
 
+const_grav = float(input('Ingrese la constante gravitacional en m/$s^{2}$: '))
+dens_c = float(input('Ingrese la densidad de la canica en kg/$m^{3}$: '))
+dens_f = float(input('Ingrese la densidad del fluído en kg/$m^{3}$: '))
 er_lon=float(input('Ingrese el error en la longitud: '))
 er_tiem = float(input('Ingrese el error en el tiempo: '))
 er_grav = float(input('Ingrese el error en la gravedad: '))
 er_rad = float(input('Ingrese el error en los radios: '))
+er_dens_c = float(input('Ingrese el error en la densidad de la canica: '))
+er_dens_f = float(input('Ingrese el error en la densidad del fluído: '))
 
 #---------------Definición de variables---------------------
 er_relat_lon = er_lon/np.min(longs)
 er_relt_tem = er_tiem/np.min(temp_prom)
-er_relat_grav = er_grav/9.78
+er_relat_grav = er_grav/const_grav
 er_relat_rad = er_rad/media
+er_relat_difmean = np.sqrt((er_dens_c**2+er_dens_f**2))/(dens_c-dens_f)
 tam_muest_rad = info.shape[0]
+tam_muest_tiem = tiempos.shape[1]
+visc = (2/9)*(dens_c-dens_f)*(const_grav)*(media**2)*(1/(a))*0.01
+
 #-------------Parámetro t-student para los radios------------
-t = t.interval(0.95, tam_muest_rad-1)[1]
-t = np.round(t,3)
-#print('El valor del parámetro t es:', t)
-
+t_1 = t.interval(0.95, tam_muest_rad-1)[1]
+t_1 = np.round(t_1,3)
 stand_desv_rad = np.sqrt((1/(tam_muest_rad-1))*(sum((info-media)**2)))
-error_aleatorio_rad = (t*stand_desv_rad)/(np.sqrt(tam_muest_rad))
-
+error_aleatorio_rad = (t_1*stand_desv_rad)/(np.sqrt(tam_muest_rad))
+stand_desv_vel = np.sqrt((np.sum((longs-b-a*temp_prom)**2))/(tiempos.shape[1]-2))
 er_sist_vel = np.sqrt(er_relat_lon**2 + er_relt_tem**2)
+sxx = np.sum((temp_prom - np.mean(tiempos))**2)
+t_2 = round(t.interval(0.95, tam_muest_tiem-2)[1], 3)
+er_aleat_vel = (1/a)*t_2*(stand_desv_vel/np.sqrt(sxx))
+er_visc = np.sqrt((er_relat_difmean)**2+(er_grav)**2+(2*(er_relat_rad**2))+er_sist_vel**2)
+# ------------------------------------------------------------------
+print('\n')
+print('+--------------------------Datos experimentales---------------------------+')
+print(f'y=ax+b --> a={a} y b={b}\nVelocidad límite= {a}\nViscosidad= {visc}')
 
-stand_desv_vel = np.sqrt((np.sum((longs-b-a*tiempos)**2))/(tiempos.shape[0]-2))
-
-sxx = np.sum((tiempos - np.mean(temp_prom))**2)
-print(sxx)
-
-# -------------------Propagación de errores-----------------------------
-print('\n+-----------------Errores relativos---------------------+')
-print(f"El error relativo en la longitud es: {np.round(er_relat_lon,5)}")
-print(f'El error relativo en el tiempo es: {np.round(er_relt_tem,5)}')
-print(f'El error relativo en la gravedad es: {round(er_relat_grav,5)}')
-print(f'El error relativo en el radio es: {round(er_relat_rad,5)}')
-print(f'El error relativo aleatorio en el radio es:{round(error_aleatorio_rad,5)}')
-print(f'El error relativo total en el radio es: {round(error_aleatorio_rad+er_relat_rad,5)}')
-print(f'El error sistemático en la velocidad límite es:{round(er_sist_vel,5)}')
-
+print('+-----------------Propagación de errores relativos-----------------------+')
+print(f"El error relativo en la longitud es= {np.round(er_relat_lon,5)}")
+print(f'El error relativo en el tiempo es= {np.round(er_relt_tem,5)}')
+print(f'El error relativo en la gravedad es= {round(er_relat_grav,5)}')
+print(f'El error relativo en el radio es= {round(er_relat_rad,5)}')
+print(f'El error relativo aleatorio en el radio es= {round(error_aleatorio_rad,5)}')
+print(f'El error relativo total en el radio es= {round(error_aleatorio_rad+er_relat_rad,5)}')
+print(f'El error relativo en la diferencia de las densidades es= {round(er_relat_difmean,5)}')
+print(f'El error sistemático en la velocidad límite es= {round(er_sist_vel,5)}')
+print(f'El error aleatorio en la velocidad límite es= {round(er_aleat_vel,5)}')
+print(f'El error sistemático total de la velocidad límite es= {round(np.sqrt(er_sist_vel**2+er_aleat_vel**2),5)}')
+print(f'El error en la viscosidad es={er_visc}')
 print('+-------------------------------------------------------+')
 
 
