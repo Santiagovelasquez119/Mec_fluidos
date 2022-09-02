@@ -9,8 +9,8 @@ vel = np.array((datos['Velocidad'].values))
 ajuste = np.polyfit(dist, vel, 3)
 a,b,c,d = ajuste[0], ajuste[1], ajuste[2], ajuste[3]
 print(ajuste)
-ecuacion = a*(dist**3)+b*dist**2+c*dist+d
-etiqueta_eq = 'y='+str(a)+'y+'+str(b)+'$y^{3}$'
+ecuacion = a*(dist**3)+b*(dist**2)+c*dist+d
+etiqueta_eq = 'u='+str(a)+'y+'+str(b)+'$y^{3}$'
 
 plt.figure()
 plt.plot(dist,vel, marker='.', color='k', ls='', label='Datos experimentales')
