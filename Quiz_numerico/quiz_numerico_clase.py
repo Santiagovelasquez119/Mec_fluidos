@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.formula.api as smf
+from scipy.interpolate import interp1d
 # tenemos que y es igual a:
 y = np.array([0.005,0.01,0.02,0.04,0.06,0.08])
 
@@ -21,13 +22,17 @@ C1 = round(coefs[0],4)
 C2 = round(coefs[1],4)
 print('C1 = ' +str(C1)+' s^-1')
 print ('C2 = ' +str(C2)+' ft^-2 s^-1')
-ecuacion = C1*y+C2*(y**3)
+
+ecuacion = interp1d(y, u, kind="cubic")
+
+X=np.linspace(np.min(y),np.max(y),500)
+Y= ecuacion(X)
 etiqueta = 'u='+str(C1)+'y+'+str(C2)+'$y^{3}$'
 
 plt.figure()
 plt.title('Perfil de velocidades')
 plt.plot(y, u, marker='.', color='k', ls='', label='Datos experimentales')
-plt.plot(y, ecuacion, color='r', ls='--', label=etiqueta)
+plt.plot(X, Y, color='r', ls='--', label=etiqueta)
 plt.grid(ls='--')
 plt.xlabel('y (pie)')
 plt.ylabel('Velocidad (pie/s)')
