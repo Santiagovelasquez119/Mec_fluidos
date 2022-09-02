@@ -30,14 +30,14 @@ etiqueta = 'y='+str(a)+'x''+'+str(b)
 
 plt.figure()
 plt.title('Datos experimentales')
-plt.plot(tiempo, longitudes, ls='', marker='.', color='k', label='Datos experimentales')
+plt.plot(tiempo, longitudes, ls='', marker='o', color='k', label='Datos experimentales')
 plt.xlabel('Tiempo(s)')
 plt.ylabel('Longitud(pie)')
-plt.grid(ls='--')
+plt.grid(ls='')
 plt.plot(tiempo, ecuacion, ls='--', color='r', label=etiqueta)
 plt.legend()
 plt.savefig('Datos experimentales Quiz#1.pdf', dpi=150)
-#plt.show()
+plt.show()
 plt.close()
 
 #definición de variables

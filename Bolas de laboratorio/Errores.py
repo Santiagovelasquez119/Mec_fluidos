@@ -93,7 +93,7 @@ error_aleatorio_rad = (t_1*stand_desv_rad)/(np.sqrt(tam_muest_rad))
 stand_desv_vel = np.sqrt((np.sum((longs-b-a*temp_prom)**2))/(tiempos.shape[1]-2))
 er_sist_vel = np.sqrt(er_relat_lon**2 + er_relt_tem**2)
 sxx = np.sum((temp_prom - np.mean(tiempos))**2)
-t_2 = round(t.interval(0.95, tam_muest_tiem-2)[1], 3)
+t_2 = round(t.interval(0.95, 5-2)[1], 3)
 er_aleat_vel = (1/a)*t_2*(stand_desv_vel/np.sqrt(sxx))
 er_visc = np.sqrt((er_relat_difmean)**2+(er_grav)**2+(2*(er_relat_rad**2))+er_sist_vel**2)
 # ------------------------------------------------------------------
